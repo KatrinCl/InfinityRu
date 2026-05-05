@@ -1,22 +1,8 @@
 import multer from "multer";
-import path from "path";
-import fs from "fs";
 
-// Создаём временную папку для локальной разработки
-const uploadDir = path.join(process.cwd(), 'uploads');
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir, { recursive: true });
-}
-
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, uploadDir);
-  },
-  filename: (_req, file, cb) => {
-    const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
-    cb(null, `${uniqueSuffix}-${file.originalname}`);
-  },
-});
+// На Vercel нельзя писать в файловую систему, используем MemoryStorage
+// Изображения всё равно загружаются в Cloudinary
+const storage = multer.memoryStorage();
 
 const upload = multer({ 
   storage,

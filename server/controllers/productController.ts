@@ -24,18 +24,34 @@ export const addProduct = async (req: Request, res: Response) => {
         )
       }
 
-      if (!file?.path) {
-        throw new Error('Multer file path is missing')
-      }
-
-      try {
-        const uploadResult = await cloudinary.uploader.upload(file.path, {
-          folder: cloudinaryUploadFolder,
+      // Для memoryStorage используем buffer, для diskStorage - path
+      if (file.path) {
+        // Disk storage - обычный путь
+        try {
+          const uploadResult = await cloudinary.uploader.upload(file.path, {
+            folder: cloudinaryUploadFolder,
+          })
+          return uploadResult.secure_url
+        } finally {
+          await fs.unlink(file.path).catch(() => {})
+        }
+      } else if (file.buffer) {
+        // Memory storage - используем buffer
+        return new Promise<string>((resolve, reject) => {
+          const uploadStream = cloudinary.uploader.upload_stream(
+            { folder: cloudinaryUploadFolder },
+            (error, result) => {
+              if (error || !result) {
+                reject(error || new Error('Cloudinary upload failed'))
+              } else {
+                resolve(result.secure_url)
+              }
+            }
+          )
+          uploadStream.end(file.buffer)
         })
-        return uploadResult.secure_url
-      } finally {
-        // Cleanup temp file after upload attempt.
-        await fs.unlink(file.path).catch(() => {})
+      } else {
+        throw new Error('File buffer or path is missing')
       }
     }
 

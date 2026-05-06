@@ -87,7 +87,7 @@ const PlaceOrder = () => {
         if (method === 'online' && stripePublishableKey) {
           setIsLoading(true)
 
-          // Создаём PaymentIntent
+          // Создаём Checkout Session
           const paymentResponse = await axios.post(
             `${backendUrl}/api/order/pay`,
             { amount: getCartAmount(), orderId },
@@ -95,30 +95,20 @@ const PlaceOrder = () => {
           )
 
           if (paymentResponse.data.success) {
-            const { clientSecret } = paymentResponse.data
+            const { sessionId } = paymentResponse.data
 
             // Загружаем Stripe
             const Stripe = await loadStripeScript()
             const stripe = Stripe(stripePublishableKey) as any
 
-            // Перенаправляем на страницу оплаты Stripe
-            const result = await stripe.confirmPayment({
-              clientSecret,
-              redirect: 'if_required',
-            })
+            // Перенаправляем на страницу Stripe Checkout
+            const result = await stripe.redirectToCheckout({ sessionId })
 
             if (result.error) {
-              toast.error(result.error.message || 'Ошибка оплаты')
-              setIsLoading(false)
-            } else if (result.paymentIntent && result.paymentIntent.status === 'succeeded') {
-              // Оплата прошла успешно
-              setCartItems({})
-              navigate('/orders')
-              toast.success('Оплата прошла успешно!')
-            } else {
-              // Если не вернулись на сайт после оплаты
+              toast.error(result.error.message || 'Ошибка перенаправления на оплату')
               setIsLoading(false)
             }
+            // Если успех — Stripe перенаправит на свою страницу оплаты
           } else {
             toast.error(paymentResponse.data.message)
             setIsLoading(false)

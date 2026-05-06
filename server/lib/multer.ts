@@ -1,7 +1,5 @@
 import multer from "multer";
 
-// На Vercel нельзя писать в файловую систему, используем MemoryStorage
-// Изображения всё равно загружаются в Cloudinary
 const storage = multer.memoryStorage();
 
 const upload = multer({ 

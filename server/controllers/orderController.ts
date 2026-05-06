@@ -100,35 +100,45 @@ export const placeOrderUkassa = async (_req: Request, res: Response) => {
 export const createPaymentIntent = async (req: Request, res: Response) => {
   try {
     if (!isStripeConfigured || !stripe) {
-      return res.status(501).json({ success: false, message: "Stripe не настроен" });
+      return res.status(501).json({ success: false, message: 'Stripe не настроен' });
     }
 
     const { amount, orderId } = req.body;
 
     if (!amount || !orderId) {
-      return res.status(400).json({ success: false, message: "Укажите amount и orderId" });
+      return res.status(400).json({ success: false, message: 'Укажите amount и orderId' });
     }
 
-    // Stripe test режим не поддерживает RUB, используем USD
-    // Для продакшена с RUB нужен Stripe Account в поддерживаемой стране
-    const paymentIntent = await stripe.paymentIntents.create({
-      amount: Math.round(Number(amount) * 100), // Stripe использует центы
-      currency: 'usd',
+    // Создаём Checkout Session для перенаправления на страницу Stripe
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ['card'],
+      line_items: [
+        {
+          price_data: {
+            currency: 'usd',
+            product_data: {
+              name: `Заказ #${orderId}`,
+            },
+            unit_amount: Math.round(Number(amount) * 100), // Stripe использует центы
+          },
+          quantity: 1,
+        },
+      ],
+      mode: 'payment',
       metadata: {
         orderId: String(orderId),
       },
-      automatic_payment_methods: {
-        enabled: true,
-      },
+      success_url: `${process.env.FRONTEND_URL || 'https://infinitytsru.vercel.app'}/orders?payment=success`,
+      cancel_url: `${process.env.FRONTEND_URL || 'https://infinitytsru.vercel.app'}/cart`,
     });
 
     res.json({
       success: true,
-      clientSecret: paymentIntent.client_secret,
-      paymentIntentId: paymentIntent.id,
+      sessionId: session.id,
+      url: session.url,
     });
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Create payment intent error";
+    const message = error instanceof Error ? error.message : 'Create payment intent error';
     res.status(500).json({ success: false, message });
   }
 };

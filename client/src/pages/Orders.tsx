@@ -31,7 +31,7 @@ const Orders = () => {
     try {
       const { data } = await axios.post(`${backendUrl}/api/order/orders`)
       if (data.success) {
-        setOrders(data.orders.reverse())
+        setOrders(data.orders)
       }
     } catch (error) {
       console.log(error)

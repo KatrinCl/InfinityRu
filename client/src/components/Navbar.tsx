@@ -38,16 +38,14 @@ const Navbar = () => {
 
   return (
     <div className='flex flex-col px-5 md:px-10'>
-      {/* TOP */}
       <div className='flex justify-between items-center'>
-        {/* BURGER */}
-        <div className='md:hidden flex flex-col justify-between w-8 h-6 cursor-pointer z-[1001]' onClick={toggleMenu}>
+
+        <div className='md:hidden flex flex-col justify-between w-5 h-5 cursor-pointer z-[1001]' onClick={toggleMenu}>
           <div className={`h-[3px] bg-gray-800 transition ${isMenuOpen ? 'rotate-45 translate-y-2' : ''}`} />
           <div className={`h-[3px] bg-gray-800 transition ${isMenuOpen ? 'opacity-0' : ''}`} />
           <div className={`h-[3px] bg-gray-800 transition ${isMenuOpen ? '-rotate-45 -translate-y-2' : ''}`} />
         </div>
 
-        {/* DELIVERY */}
         <div className='hidden md:flex gap-2 items-center cursor-pointer'>
           <img src='./logo3.jpg' className='w-[190px] h-[170px]' />
           <div className='flex flex-col gap-2 justify-center'>
@@ -57,45 +55,39 @@ const Navbar = () => {
           </div>
         </div>
 
-        {/* LOGO */}
         <Link to='/'>
-          <img src={assets.logo} className='w-[230px] md:w-[220px]' />
+          <img src={assets.logo} className='w-[60px] md:w-[220px]' />
         </Link>
 
-        {/* RIGHT */}
-        <div className='flex gap-6 md:gap-12 items-center text-base md:text-lg'>
-          {/* LOCATION */}
+        <div className='flex gap-6 md:gap-12 items-center text-sm md:text-lg'>
           <Link to='/location' className='flex flex-col items-center'>
             <img src={assets.location} className='w-8 md:w-12' />
-            <p>Москва</p>
+            <p className='hidden md:block'>Москва</p>
           </Link>
 
-          {/* CONTACT */}
           <div onClick={toggleContactModal} className='hidden md:flex flex-col items-center cursor-pointer hover:opacity-70 transition'>
             <img src='./call.svg' className='w-8 md:w-12' />
             <p>Связаться</p>
           </div>
 
-          {/* CART */}
           <div className='text-center cursor-pointer hover:opacity-70 transition'>
             <Link to='/cart' className='relative inline-block'>
               <img src='./cart_icon.svg' className='w-8 md:w-12' />
-              <span className='absolute top-6 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs'>{getCartCount()}</span>
+              <span className='absolute top-4 md:top-6 -right-4 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs'>{getCartCount()}</span>
             </Link>
-            <p>Корзина</p>
+            <p className='hidden md:block'>Корзина</p>
           </div>
 
-          {/* USER */}
           {!user ? (
             <div onClick={() => setShowUserLogin(true)} className='flex flex-col items-center cursor-pointer hover:opacity-70 transition'>
-              <img src='./home.svg' className='w-8 md:w-12' />
+              <img src='./home.svg' className='w-6 md:w-12' />
               <p>Войти</p>
             </div>
           ) : (
-            <div className='relative group cursor-pointer hover:opacity-70 transition'>
-              <img src='./profile_icon.png' className='w-12 h-12 md:w-16 md:h-16' />
+            <div className='relative group cursor-pointer hover:opacity-80 transition'>
+              <img src='./profile_icon.png' className='w-10 h-10 md:w-16 md:h-16' />
 
-              <div className='absolute right-0 mt-2 w-32 bg-white border rounded shadow opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200'>
+              <div className='absolute right-0 mt-2 w-32 bg-white border rounded shadow opacity-100 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200'>
                 <ul>
                   <li onClick={() => navigate('/orders')} className='px-4 py-2 hover:bg-blue-100 cursor-pointer first:rounded-t'>
                     Заказы
@@ -109,7 +101,7 @@ const Navbar = () => {
           )}
         </div>
       </div>
-      {/* BOTTOM */}
+
       <div className='hidden md:flex justify-center items-center gap-12 py-3'>
         <Link to='/menu' className='cursor-pointer'>
           <p className='text-xl italic hover:text-red-500 hover:underline hover:decoration-wavy'>меню</p>
@@ -134,12 +126,12 @@ const Navbar = () => {
         <img src={assets.dot_red} className='w-10' />
         <p className='text-xl italic cursor-pointer hover:underline hover:decoration-wavy hover:text-red-500'>отзывы</p>
       </div>
-      {/* MODAL */}
+
       {showContactModal && (
         <div onClick={handleOutsideClick} className='fixed inset-0 bg-black/50 flex justify-center items-center z-50'>
           <div className='bg-white p-10 rounded-xl w-[400px] max-w-[90%] relative'>
             <span onClick={toggleContactModal} className='absolute top-3 right-4 text-2xl cursor-pointer'>
-              &times;
+              X
             </span>
 
             <div className='space-y-4'>
@@ -161,9 +153,9 @@ const Navbar = () => {
       )}
       {/* MOBILE MENU */}
       <div
-        className={`fixed top-0 left-0 h-full w-[80%] bg-white md:hidden p-6 transition-transform duration-300 z-[60]
+        className={`fixed top-0 left-0 h-full w-[80%] bg-white md:hidden p-6 transition-transform duration-300 z-[999]
   ${isMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}>
-        <div className='flex flex-col gap-6 mt-16 text-lg'>
+        <div className='flex flex-col gap-6 mt-16 text-md'>
           <Link to='/menu' onClick={closeMobileMenu} className='cursor-pointer hover:text-red-500 transition'>
             меню
           </Link>
@@ -172,14 +164,20 @@ const Navbar = () => {
             условия доставки
           </Link>
 
-          <p onClick={closeMobileMenu} className='cursor-pointer hover:text-red-500 transition'>бонусная карта</p>
-          <p onClick={closeMobileMenu} className='cursor-pointer hover:text-red-500 transition'>рестораны</p>
+          <p onClick={closeMobileMenu} className='cursor-pointer hover:text-red-500 transition'>
+            бонусная карта
+          </p>
+          <p onClick={closeMobileMenu} className='cursor-pointer hover:text-red-500 transition'>
+            рестораны
+          </p>
 
           <Link to='/about' onClick={closeMobileMenu} className='cursor-pointer hover:text-red-500 transition'>
             о нас
           </Link>
 
-          <p onClick={closeMobileMenu} className='cursor-pointer hover:text-red-500 transition'>отзывы</p>
+          <p onClick={closeMobileMenu} className='cursor-pointer hover:text-red-500 transition'>
+            отзывы
+          </p>
 
           <div
             onClick={() => {

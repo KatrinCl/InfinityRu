@@ -13,30 +13,26 @@ const ProductItem = ({ id, name, price, image }: ProductItemProps) => {
   const imageSrc = getImageSrc(backendUrl, previewImage)
 
   return (
-    <div className='flex flex-col w-full max-w-[260px] rounded-2xl overflow-hidden hover:bg-red-100 transition'>
-      {/* IMAGE */}
+    <div className='flex flex-col w-full max-w-[340px] rounded-2xl hover:bg-red-100 transition'>
+
       <Link to={`/product/${id}`} className='w-full'>
-        <img src={imageSrc} alt={name} className='w-full h-[200px] md:h-[220px] object-cover' />
+        <img src={imageSrc} alt={name} className='w-full rounded-2xl  md:w-[340px] h-[140px] md:h-[300px] object-cover' />
       </Link>
 
-      {/* INFO */}
       <div className='flex flex-col gap-3 p-3 flex-grow'>
         <p className='text-base md:text-lg italic min-h-[40px]'>{name}</p>
 
         <div className='flex justify-between items-center'>
-          {/* COUNT */}
-          <div className='flex items-center gap-3'>
-            <img src={assets.circle_minus} onClick={() => removeFromCart(id)} className={`w-5 cursor-pointer ${quantity === 0 ? 'opacity-30 pointer-events-none' : ''}`} />
-            <p className='text-lg'>{quantity}</p>
-            <img src={assets.circle_plus} onClick={() => addToCart(id)} className='w-5 cursor-pointer' />
+          <div className='flex items-center gap-2 md:gap-3'>
+            <img src={assets.circle_minus} onClick={() => removeFromCart(id)} className={`w-4 md:w-5 cursor-pointer ${quantity === 0 ? 'opacity-30 pointer-events-none' : ''}`} />
+            <p className='md:text-lg'>{quantity}</p>
+            <img src={assets.circle_plus} onClick={() => addToCart(id)} className='w-4 md:w-5 cursor-pointer' />
           </div>
 
-          {/* PRICE */}
-          <p className='text-lg font-semibold'>{price} ₽</p>
+          <p className='md:text-lg font-semibold'>{price} ₽</p>
         </div>
       </div>
 
-      {/* BUTTON */}
       <div onClick={() => addToCart(id)} className='m-3 mt-auto border border-red-500 rounded-lg py-2 text-center text-red-500 cursor-pointer hover:bg-red-500 hover:text-white transition'>
         {quantity > 0 ? 'В корзине' : 'В корзину'}
       </div>

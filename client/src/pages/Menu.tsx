@@ -8,7 +8,6 @@ const Menu = () => {
 
   const [selectedCategory, setSelectedCategory] = useState<string>('Все')
 
-  // Получаем названия категорий (обрабатываем и строку и объект)
   const categories = ['Все', ...new Set(products.map(item => 
     typeof item.category === 'string' ? item.category : item.category?.name || ''
   ).filter(Boolean))]
@@ -24,11 +23,9 @@ const Menu = () => {
 
   return (
     <div className='flex flex-col m-2'>
-      {/* BANNER */}
       <img src={assets.menu} className='w-full mx-auto rounded-xl' />
 
-      {/* CATEGORIES */}
-      <div className='flex flex-wrap gap-4 md:gap-6 m-4 md:m-6'>
+      <div className='flex flex-wrap gap-3 md:gap-6 m-2 md:m-6'>
         {categories.map((category, index) => (
           <p
             key={index}
@@ -41,8 +38,7 @@ const Menu = () => {
         ))}
       </div>
 
-      {/* PRODUCTS */}
-      <div className='flex flex-wrap gap-5 justify-center items-center m-4'>
+      <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 m-4'>
         {filteredProducts.map((item, index: number) => (
           <ProductItem key={index} id={item.id} name={item.name} price={item.price} image={item.image} />
         ))}

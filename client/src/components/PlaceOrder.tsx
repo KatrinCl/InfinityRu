@@ -101,14 +101,24 @@ const PlaceOrder = () => {
             const Stripe = await loadStripeScript()
             const stripe = Stripe(stripePublishableKey) as any
 
-            // Перенаправляем на страницу оплаты Stripe (redirect: 'always' для обязательного перехода)
-            await stripe.confirmPayment({
+            // Перенаправляем на страницу оплаты Stripe
+            const result = await stripe.confirmPayment({
               clientSecret,
-              redirect: 'always',
+              redirect: 'if_required',
             })
 
-            // Если не перенаправило (ошибка)
-            setIsLoading(false)
+            if (result.error) {
+              toast.error(result.error.message || 'Ошибка оплаты')
+              setIsLoading(false)
+            } else if (result.paymentIntent && result.paymentIntent.status === 'succeeded') {
+              // Оплата прошла успешно
+              setCartItems({})
+              navigate('/orders')
+              toast.success('Оплата прошла успешно!')
+            } else {
+              // Если не вернулись на сайт после оплаты
+              setIsLoading(false)
+            }
           } else {
             toast.error(paymentResponse.data.message)
             setIsLoading(false)

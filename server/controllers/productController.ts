@@ -173,7 +173,11 @@ export const listCategories = async (_req: Request, res: Response) => {
 
 export const listProducts = async (_req: Request, res: Response) => {
   try {
-    const products = await prisma.product.findMany();
+    const products = await prisma.product.findMany({
+      include: {
+        category: true,
+      },
+    });
     res.json({ success: true, products });
   } catch (error) {
     const message = error instanceof Error ? error.message : "List products error";
@@ -194,7 +198,12 @@ export const removeProduct = async (req: Request, res: Response) => {
 export const singleProduct = async (req: Request, res: Response) => {
   try {
     const { productId } = req.body;
-    const product = await prisma.product.findUnique({ where: { id: Number(productId) } });
+    const product = await prisma.product.findUnique({ 
+      where: { id: Number(productId) },
+      include: {
+        category: true,
+      },
+    });
     res.json({ success: true, product });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Get product error";

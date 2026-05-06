@@ -95,14 +95,16 @@ const Navbar = () => {
             <div className='relative group cursor-pointer'>
               <img src='./profile_icon.png' className='w-12 h-12 md:w-16 md:h-16' />
 
-              <ul className='absolute right-0 mt-2 w-32 bg-white border rounded shadow hidden group-hover:block'>
-                <li onClick={() => navigate('/orders')} className='px-4 py-2 hover:bg-blue-100 cursor-pointer'>
-                  Заказы
-                </li>
-                <li onClick={logout} className='px-4 py-2 hover:bg-blue-100 cursor-pointer'>
-                  Выйти
-                </li>
-              </ul>
+              <div className='absolute right-0 mt-2 w-32 bg-white border rounded shadow opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200'>
+                <ul>
+                  <li onClick={() => navigate('/orders')} className='px-4 py-2 hover:bg-blue-100 cursor-pointer first:rounded-t'>
+                    Заказы
+                  </li>
+                  <li onClick={logout} className='px-4 py-2 hover:bg-blue-100 cursor-pointer last:rounded-b'>
+                    Выйти
+                  </li>
+                </ul>
+              </div>
             </div>
           )}
         </div>

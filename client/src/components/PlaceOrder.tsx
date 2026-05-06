@@ -101,20 +101,14 @@ const PlaceOrder = () => {
             const Stripe = await loadStripeScript()
             const stripe = Stripe(stripePublishableKey) as any
 
-            // Перенаправляем на страницу оплаты Stripe
-            const result = await stripe.confirmPayment({
+            // Перенаправляем на страницу оплаты Stripe (redirect: 'always' для обязательного перехода)
+            await stripe.confirmPayment({
               clientSecret,
-              redirect: 'if_required',
+              redirect: 'always',
             })
 
-            if (result.error) {
-              toast.error(result.error.message || 'Ошибка оплаты')
-              setIsLoading(false)
-            } else {
-              setCartItems({})
-              navigate('/orders')
-              toast.success('Оплата прошла успешно!')
-            }
+            // Если не перенаправило (ошибка)
+            setIsLoading(false)
           } else {
             toast.error(paymentResponse.data.message)
             setIsLoading(false)
@@ -135,19 +129,19 @@ const PlaceOrder = () => {
 
   return (
     <div className='flex justify-center w-full px-4 md:px-10 my-8'>
-      <div className='w-full max-w-4xl bg-white rounded-xl p-6 md:p-8 shadow'>
+      <div className='w-full max-w-5xl bg-white rounded-xl p-6 md:p-8 shadow'>
         <h2 className='text-xl md:text-2xl font-semibold text-gray-800 mb-5'>Оформление заказа</h2>
 
-        <form onSubmit={onSubmitHandler} className='flex flex-col gap-5'>
+        <form onSubmit={onSubmitHandler} className='flex flex-col gap-6'>
           {/* ROW 1 */}
           <div className='flex flex-col md:flex-row gap-5'>
             <div className='flex flex-col gap-2 w-full'>
-              <label className='text-gray-600'>Имя</label>
+              <label className='text-gray-600'>Имя *</label>
               <input name='name' value={formData.name} onChange={onChangeHandler} required className='w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-red-300 outline-none' />
             </div>
 
             <div className='flex flex-col gap-2 w-full'>
-              <label className='text-gray-600'>Телефон</label>
+              <label className='text-gray-600'>Телефон *</label>
               <input name='phone' value={formData.phone} onChange={onChangeHandler} required className='w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-red-300 outline-none' />
             </div>
           </div>
@@ -156,26 +150,26 @@ const PlaceOrder = () => {
           <div className='flex flex-col md:flex-row gap-5'>
             <div className='flex flex-col gap-2 w-full'>
               <label className='text-gray-600'>Email</label>
-              <input name='email' value={formData.email} onChange={onChangeHandler} className='w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-red-300 outline-none' />
+              <input name='email' value={formData.email} onChange={onChangeHandler} type='email' className='w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-red-300 outline-none' />
             </div>
 
             <div className='flex flex-col gap-2 w-full'>
               <label className='text-gray-600'>Время доставки</label>
-              <input name='deliveryTime' value={formData.deliveryTime} onChange={onChangeHandler} className='w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-red-300 outline-none' />
+              <input name='deliveryTime' value={formData.deliveryTime} onChange={onChangeHandler} placeholder='Например: 14:00-16:00' className='w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-red-300 outline-none' />
             </div>
           </div>
 
           {/* ADDRESS */}
           <div className='flex flex-col gap-2'>
-            <label className='text-gray-600'>Адрес доставки</label>
-            <input name='address' value={formData.address} onChange={onChangeHandler} required className='w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-red-300 outline-none' />
+            <label className='text-gray-600'>Адрес доставки *</label>
+            <input name='address' value={formData.address} onChange={onChangeHandler} required placeholder='Улица, дом, квартира' className='w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-red-300 outline-none' />
           </div>
 
           {/* PAYMENT */}
           <div className='flex flex-col gap-2'>
-            <label className='text-gray-600'>Способ оплаты</label>
+            <label className='text-gray-600'>Способ оплаты *</label>
 
-            <div className='flex flex-wrap gap-5'>
+            <div className='flex flex-wrap gap-6'>
               {['cash', 'card', 'online'].map(item => (
                 <label key={item} className='flex items-center gap-2 cursor-pointer'>
                   <input type='radio' checked={method === item} onChange={() => setMethod(item)} disabled={item === 'online' && !stripePublishableKey} />
@@ -189,8 +183,8 @@ const PlaceOrder = () => {
 
           {/* COMMENT */}
           <div className='flex flex-col gap-2'>
-            <label className='text-gray-600'>Комментарий</label>
-            <textarea name='comment' value={formData.comment} onChange={onChangeHandler} className='w-full px-4 py-3 border rounded-lg min-h-[100px] focus:ring-2 focus:ring-red-300 outline-none' />
+            <label className='text-gray-600'>Комментарий к заказу</label>
+            <textarea name='comment' value={formData.comment} onChange={onChangeHandler} className='w-full px-4 py-3 border rounded-lg min-h-[120px] focus:ring-2 focus:ring-red-300 outline-none resize-none' placeholder='Дополнительные пожелания...' />
           </div>
 
           {/* SUMMARY */}

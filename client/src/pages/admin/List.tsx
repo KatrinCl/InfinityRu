@@ -7,7 +7,7 @@ type Product = {
   id: number
   name: string
   price: number
-  category: string
+  category: string | { id: number; name: string }
   image: string[] | string
   popular: boolean
 }
@@ -107,7 +107,9 @@ const List = () => {
                           <span>{p.name}</span>
                         </div>
                       </td>
-                      <td className='p-2'>{p.category}</td>
+                      <td className='p-2'>
+                        {typeof p.category === 'string' ? p.category : p.category?.name || '-'}
+                      </td>
                       <td className='p-2'>{p.price} ₽</td>
                       <td className='p-2'>
                         <span className={`px-2 py-1 rounded text-xs font-semibold ${p.popular ? 'bg-red-100 text-red-700' : 'bg-gray-100 text-gray-700'}`}>

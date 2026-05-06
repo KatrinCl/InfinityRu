@@ -124,7 +124,7 @@ const List = () => {
                         <button
                           onClick={() => void removeProduct(p.id)}
                           disabled={removingId === p.id}
-                          className='px-3 py-2 rounded-md bg-red-500 text-white hover:bg-red-600 transition disabled:opacity-50'
+                          className='px-3 py-2 rounded-md bg-red-500 text-white hover:bg-red-600 transition disabled:opacity-50 cursor-pointer'
                         >
                           {removingId === p.id ? 'Удаление...' : 'Удалить'}
                         </button>

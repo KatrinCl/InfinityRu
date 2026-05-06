@@ -19,6 +19,8 @@ interface Order {
     name: string
     phone: string
     street: string
+    deliveryTime?: string
+    comment?: string
   }
   date: string
 }
@@ -83,6 +85,16 @@ const Orders = () => {
               <p>
                 <strong>Адрес:</strong> {order.address.street}
               </p>
+              {order.address.deliveryTime && (
+                <p>
+                  <strong>Ко времени:</strong> {order.address.deliveryTime}
+                </p>
+              )}
+              {order.address.comment && (
+                <p>
+                  <strong>Комментарий:</strong> {order.address.comment}
+                </p>
+              )}
             </div>
 
             {/* ITEMS */}

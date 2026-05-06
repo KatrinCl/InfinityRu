@@ -37,7 +37,7 @@ const AdminLogin = () => {
         <h1 className='text-xl font-semibold'>Вход администратора</h1>
         <input value={email} onChange={e => setEmail(e.target.value)} type='email' placeholder='Email' className='border rounded-md px-3 py-2' />
         <input value={password} onChange={e => setPassword(e.target.value)} type='password' placeholder='Пароль' className='border rounded-md px-3 py-2' />
-        <button type='submit' className='bg-red-500 text-white py-2 rounded-md hover:bg-red-600 transition'>
+        <button type='submit' className='bg-red-500 text-white py-2 rounded-md hover:bg-red-600 transition cursor-pointer'>
           Войти
         </button>
       </form>

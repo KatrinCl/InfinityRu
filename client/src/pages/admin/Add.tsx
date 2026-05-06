@@ -177,7 +177,7 @@ const Add = () => {
         </div>
 
         <div className='flex items-center gap-3'>
-          <button type='submit' className='px-4 py-2 rounded-md bg-red-500 text-white hover:bg-red-600 transition'>
+        <button type='submit' className='px-4 py-2 rounded-md bg-red-500 text-white hover:bg-red-600 transition cursor-pointer'>
             Добавить товар
           </button>
         </div>

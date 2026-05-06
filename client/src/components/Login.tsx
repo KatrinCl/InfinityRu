@@ -94,7 +94,7 @@ const Login = () => {
           </p>
         )}
 
-        <button type='submit' className='w-full py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition'>
+        <button type='submit' className='w-full py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition cursor-pointer'>
           {state === 'register' ? 'Создать аккаунт' : 'Авторизация'}
         </button>
       </form>

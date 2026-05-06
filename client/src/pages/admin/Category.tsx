@@ -102,7 +102,7 @@ const Category = () => {
           />
         </label>
 
-        <button className='px-4 py-2 rounded-md bg-red-500 text-white hover:bg-red-600 transition whitespace-nowrap'>
+        <button className='px-4 py-2 rounded-md bg-red-500 text-white hover:bg-red-600 transition whitespace-nowrap cursor-pointer'>
           Добавить категорию
         </button>
       </form>
@@ -132,7 +132,7 @@ const Category = () => {
                         <button
                           onClick={() => void removeCategory(cat.id)}
                           disabled={removingId === cat.id}
-                          className='px-3 py-2 rounded-md bg-red-500 text-white hover:bg-red-600 transition disabled:opacity-50'
+                          className='px-3 py-2 rounded-md bg-red-500 text-white hover:bg-red-600 transition disabled:opacity-50 cursor-pointer'
                         >
                           {removingId === cat.id ? 'Удаление...' : 'Удалить'}
                         </button>

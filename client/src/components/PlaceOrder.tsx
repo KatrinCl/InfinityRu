@@ -193,7 +193,7 @@ const PlaceOrder = () => {
           </div>
 
           {/* BUTTON */}
-          <button type='submit' disabled={isLoading} className='w-full py-4 bg-red-500 text-white rounded-lg font-semibold hover:bg-red-400 transition disabled:opacity-50 disabled:cursor-not-allowed'>
+          <button type='submit' disabled={isLoading} className='w-full py-4 bg-red-500 text-white rounded-lg font-semibold hover:bg-red-400 transition disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer'>
             {isLoading ? 'Обработка оплаты...' : 'Оформить заказ'}
           </button>
         </form>

@@ -22,6 +22,8 @@ type Order = {
     name: string
     phone: string
     street: string
+    deliveryTime?: string
+    comment?: string
   }
   paymentMethod: string
   createdAt: string
@@ -159,6 +161,16 @@ const Orders = () => {
                     <p>
                       <strong>Адрес:</strong> {order.address?.street}
                     </p>
+                    {order.address?.deliveryTime && (
+                      <p>
+                        <strong>Ко времени:</strong> {order.address.deliveryTime}
+                      </p>
+                    )}
+                    {order.address?.comment && (
+                      <p>
+                        <strong>Комментарий:</strong> {order.address.comment}
+                      </p>
+                    )}
                     <p>
                       <strong>Оплата:</strong> {order.paymentMethod}
                     </p>
@@ -208,7 +220,7 @@ const Orders = () => {
 
                       <button
                         onClick={() => void saveStatus(order.id)}
-                        className='px-3 py-2 rounded-md bg-red-500 text-white hover:bg-red-600 transition disabled:opacity-50'
+                        className='px-3 py-2 rounded-md bg-red-500 text-white hover:bg-red-600 transition disabled:opacity-50 cursor-pointer'
                         disabled={updatingId === order.id}
                       >
                         {updatingId === order.id ? 'Сохранение...' : 'Сохранить'}

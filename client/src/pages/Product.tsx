@@ -74,7 +74,7 @@ const Product = () => {
             </div>
 
             {/* ADD BUTTON */}
-            <button onClick={() => addToCart(productData.id)} className='bg-red-500 text-white px-4 py-2 rounded-xl hover:bg-red-400 transition flex justify-between items-center gap-3'>
+            <button onClick={() => addToCart(productData.id)} className='bg-red-500 text-white px-4 py-2 rounded-xl hover:bg-red-400 transition flex justify-between items-center gap-3 cursor-pointer'>
               <span>В корзину</span>
               <span className='font-semibold'>{productData.price} ₽</span>
             </button>

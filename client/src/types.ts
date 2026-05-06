@@ -17,7 +17,7 @@ export interface Product {
   weight1: number;
   weight2: number;
   price: number;
-  category: string;
+  category: string | { id: number; name: string };
   image: string[];
   popular: boolean;
 }

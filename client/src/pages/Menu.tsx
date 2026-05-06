@@ -8,9 +8,19 @@ const Menu = () => {
 
   const [selectedCategory, setSelectedCategory] = useState<string>('Все')
 
-  const categories = ['Все', ...new Set(products.map(item => item.category))]
+  // Получаем названия категорий (обрабатываем и строку и объект)
+  const categories = ['Все', ...new Set(products.map(item => 
+    typeof item.category === 'string' ? item.category : item.category?.name || ''
+  ).filter(Boolean))]
 
-  const filteredProducts = selectedCategory === 'Все' ? products : products.filter(item => item.category === selectedCategory)
+  const filteredProducts = selectedCategory === 'Все' 
+    ? products 
+    : products.filter(item => {
+        const categoryName = typeof item.category === 'string' 
+          ? item.category 
+          : item.category?.name
+        return categoryName === selectedCategory
+      })
 
   return (
     <div className='flex flex-col m-2'>

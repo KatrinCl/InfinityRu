@@ -27,7 +27,7 @@ const Add = () => {
     popular: false,
   })
 
-  const [categories, setCategories] = useState([])
+  const [categories, setCategories] = useState<{id: number; name: string}[]>([])
   const imageKeys = ['image1', 'image2', 'image3', 'image4'] as const
   const [images, setImages] = useState<Record<(typeof imageKeys)[number], File | null>>({
     image1: null,

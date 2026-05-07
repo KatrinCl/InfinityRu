@@ -34,15 +34,26 @@ const Orders = () => {
 
   const [isLoading, setIsLoading] = useState(true)
   const [orders, setOrders] = useState<Order[]>([])
-  const [statusById, setStatusById] = useState<Record<number, OrderStatus>>({})
+  const [statusById, setStatusById] = useState<Record<number, string>>({})
   const [updatingId, setUpdatingId] = useState<number | null>(null)
+
+  // Маппинг статусов: eng -> русский
+  const statusLabels: Record<string, string> = {
+    'pending': 'В обработке',
+    'collecting': 'Собираем',
+    'in-transit': 'В пути',
+    'delivered': 'Доставлено',
+    'cancelled': 'Отменён',
+  }
 
   const statusOptions = useMemo(
     () =>
       [
-        { value: 'pending' as const, label: 'pending' },
-        { value: 'completed' as const, label: 'completed' },
-        { value: 'cancelled' as const, label: 'cancelled' },
+        { value: 'pending' as const, label: statusLabels['pending'] },
+        { value: 'collecting' as const, label: statusLabels['collecting'] },
+        { value: 'in-transit' as const, label: statusLabels['in-transit'] },
+        { value: 'delivered' as const, label: statusLabels['delivered'] },
+        { value: 'cancelled' as const, label: statusLabels['cancelled'] },
       ] as const,
     [],
   )
@@ -107,10 +118,15 @@ const Orders = () => {
 
   const getStatusStyle = (status: string) => {
     switch (status) {
+      case 'delivered':
       case 'completed':
         return 'bg-green-500 text-white'
       case 'cancelled':
         return 'bg-red-500 text-white'
+      case 'collecting':
+        return 'bg-blue-500 text-white'
+      case 'in-transit':
+        return 'bg-purple-500 text-white'
       default:
         return 'bg-yellow-400 text-black'
     }
@@ -143,7 +159,7 @@ const Orders = () => {
                           selectedStatus,
                         )}`}
                       >
-                        {selectedStatus}
+                        {statusLabels[selectedStatus] || selectedStatus}
                       </span>
                       <div className='text-xs md:text-sm font-medium text-gray-600'>
                         {new Date(order.createdAt).toLocaleString()}

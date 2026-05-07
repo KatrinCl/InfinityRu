@@ -29,6 +29,16 @@ const Orders = () => {
   const { axios, backendUrl } = useAppContext()
   const [orders, setOrders] = useState<Order[]>([])
 
+  // Маппинг статусов: eng -> русский
+  const statusLabels: Record<string, string> = {
+    'pending': 'В обработке',
+    'collecting': 'Собираем',
+    'in-transit': 'В пути',
+    'delivered': 'Доставлено',
+    'completed': 'Доставлено',
+    'cancelled': 'Отменён',
+  }
+
   const fetchOrders = async () => {
     try {
       const { data } = await axios.post(`${backendUrl}/api/order/orders`)
@@ -46,10 +56,15 @@ const Orders = () => {
 
   const getStatusStyle = (status: string) => {
     switch (status) {
+      case 'delivered':
       case 'completed':
         return 'bg-green-500 text-white'
       case 'cancelled':
         return 'bg-red-500 text-white'
+      case 'collecting':
+        return 'bg-blue-500 text-white'
+      case 'in-transit':
+        return 'bg-purple-500 text-white'
       default:
         return 'bg-yellow-400 text-black'
     }
@@ -71,7 +86,7 @@ const Orders = () => {
             <div className='flex justify-between items-center mb-3'>
               <h3 className='text-base md:text-lg font-medium'>Заказ #{String(order.id).padStart(6, '0')}</h3>
 
-              <span className={`px-2 py-1 rounded text-xs md:text-sm font-semibold ${getStatusStyle(order.status)}`}>{order.status}</span>
+              <span className={`px-2 py-1 rounded text-xs md:text-sm font-semibold ${getStatusStyle(order.status)}`}>{statusLabels[order.status] || order.status}</span>
             </div>
 
             {/* DETAILS */}

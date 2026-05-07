@@ -1,7 +1,7 @@
 import type { Request, Response } from "express";
 import prisma from "../lib/prisma.js";
 import { stripe, isStripeConfigured } from "../lib/stripe.js";
-import { sendEmail } from "../lib/nodemailer.js";
+import sendEmail from "../lib/nodemailer.js";
 
 export const placeOrder = async (req: Request, res: Response) => {
   try {
@@ -22,7 +22,6 @@ export const placeOrder = async (req: Request, res: Response) => {
       data: { cartData: {} },
     });
 
-    // Отправка письма о успешном заказе
     const user = await prisma.user.findUnique({
       where: { id: req.user!.id },
       select: { email: true, name: true },
@@ -80,8 +79,7 @@ export const placeOrder = async (req: Request, res: Response) => {
       await sendEmail({
         to: user.email,
         subject: `Подтверждение заказа #${order.id}`,
-        html,
-        text: `Спасибо за заказ! Ваш заказ #${order.id} успешно оформлен. Сумма: ${amount} ₽`,
+        body: html,
       });
     }
 
@@ -234,8 +232,7 @@ export const stripeWebhook = async (req: Request, res: Response) => {
         await sendEmail({
           to: order.user.email,
           subject: `Оплата заказа #${order.id} прошла успешно`,
-          html,
-          text: `Оплата прошла успешно! Ваш заказ #${order.id} оплачен. Сумма: ${order.amount} ₽`,
+          body: html,
         });
       }
 

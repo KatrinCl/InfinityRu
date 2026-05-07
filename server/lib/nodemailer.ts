@@ -1,54 +1,37 @@
-import nodemailer from 'nodemailer'
+import nodemailer from 'nodemailer';
 
-const brevoSmtpHost = 'smtp-relay.brevo.com'
-const brevoSmtpPort = 587
-const brevoApiKey = process.env.BREVO_API_KEY
+const transporter = nodemailer.createTransport({
+  host: "smtp-relay.brevo.com",
+  port: 587,
+  auth: {
+    user: process.env.SMTP_USER,
+    pass: process.env.SMTP_PASS,
+  },
+});
 
-export const transporter = brevoApiKey
-  ? nodemailer.createTransport({
-      host: brevoSmtpHost,
-      port: brevoSmtpPort,
-      auth: {
-        user: 'api',
-        pass: brevoApiKey,
-      },
-    })
-  : null
+type EmailOptions = {
+  to: string | string[];
+  subject: string;
+  body: string;
+};
 
-export const isBrevoConfigured = transporter !== null
-
-if (!isBrevoConfigured && process.env.NODE_ENV === 'production') {
-  console.warn('⚠️  Brevo is not configured. Set BREVO_API_KEY in .env')
-}
-
-export const sendEmail = async ({
-  to,
-  subject,
-  html,
-  text,
-}: {
-  to: string
-  subject: string
-  html: string
-  text?: string
-}) => {
-  if (!transporter) {
-    console.log('📧 Email would be sent:', { to, subject })
-    return { success: false, message: 'Email service not configured' }
+const sendEmail = async ({ to, subject, body }: EmailOptions): Promise<nodemailer.SentMessageInfo> => {
+  if (!process.env.SMTP_USER || !process.env.SMTP_PASS || !process.env.SENDER_EMAIL) {
+    throw new Error('Email configuration is missing. Check SMTP_USER, SMTP_PASS, SENDER_EMAIL in .env');
   }
 
   try {
-    const info = await transporter.sendMail({
-      from: process.env.EMAIL_FROM || 'noreply@yourdomain.com',
+    const response = await transporter.sendMail({
+      from: process.env.SENDER_EMAIL,
       to,
       subject,
-      html,
-      text,
-    })
-
-    return { success: true, messageId: info.messageId }
+      html: body,
+    });
+    return response;
   } catch (error) {
-    const message = error instanceof Error ? error.message : 'Email send error'
-    return { success: false, message }
+    console.error('Error sending email:', error);
+    throw new Error(error instanceof Error ? error.message : 'Failed to send email');
   }
-}
+};
+
+export default sendEmail;

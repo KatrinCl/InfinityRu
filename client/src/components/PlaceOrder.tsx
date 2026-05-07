@@ -133,39 +133,36 @@ const PlaceOrder = () => {
         <h2 className='text-xl md:text-2xl font-semibold text-gray-800 mb-5'>Оформление заказа</h2>
 
         <form onSubmit={onSubmitHandler} className='flex flex-col gap-6'>
-          {/* ROW 1 */}
+
           <div className='flex flex-col md:flex-row gap-5'>
             <div className='flex flex-col gap-2 w-full'>
               <label className='text-gray-600'>Имя *</label>
-              <input name='name' value={formData.name} onChange={onChangeHandler} required className='w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-red-300 outline-none' />
+              <input name='name' value={formData.name} onChange={onChangeHandler} placeholder='Ваше имя' required className='w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-red-300 outline-none' />
             </div>
 
             <div className='flex flex-col gap-2 w-full'>
               <label className='text-gray-600'>Телефон *</label>
-              <input name='phone' value={formData.phone} onChange={onChangeHandler} required className='w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-red-300 outline-none' />
+              <input name='phone' value={formData.phone} onChange={onChangeHandler} placeholder='+7 (___) ___-__-__' required className='w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-red-300 outline-none' />
             </div>
           </div>
 
-          {/* ROW 2 */}
           <div className='flex flex-col md:flex-row gap-5'>
             <div className='flex flex-col gap-2 w-full'>
               <label className='text-gray-600'>Email</label>
-              <input name='email' value={formData.email} onChange={onChangeHandler} type='email' className='w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-red-300 outline-none' />
+              <input name='email' value={formData.email} onChange={onChangeHandler} type='email' placeholder='example@mail.com' className='w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-red-300 outline-none' />
             </div>
 
             <div className='flex flex-col gap-2 w-full'>
               <label className='text-gray-600'>Время доставки</label>
-              <input name='deliveryTime' value={formData.deliveryTime} onChange={onChangeHandler} placeholder='Например: 14:00-16:00' className='w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-red-300 outline-none' />
+              <input name='deliveryTime' value={formData.deliveryTime} onChange={onChangeHandler} placeholder='Например, 19:00' className='w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-red-300 outline-none' />
             </div>
           </div>
 
-          {/* ADDRESS */}
           <div className='flex flex-col gap-2'>
             <label className='text-gray-600'>Адрес доставки *</label>
             <input name='address' value={formData.address} onChange={onChangeHandler} required placeholder='Улица, дом, квартира' className='w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-red-300 outline-none' />
           </div>
 
-          {/* PAYMENT */}
           <div className='flex flex-col gap-2'>
             <label className='text-gray-600'>Способ оплаты *</label>
 
@@ -181,18 +178,15 @@ const PlaceOrder = () => {
             </div>
           </div>
 
-          {/* COMMENT */}
           <div className='flex flex-col gap-2'>
             <label className='text-gray-600'>Комментарий к заказу</label>
             <textarea name='comment' value={formData.comment} onChange={onChangeHandler} className='w-full px-4 py-3 border rounded-lg min-h-[120px] focus:ring-2 focus:ring-red-300 outline-none resize-none' placeholder='Дополнительные пожелания...' />
           </div>
 
-          {/* SUMMARY */}
           <div className='border-t pt-4 text-lg'>
             Итого: <span className='font-semibold text-red-500'>{getCartAmount()} ₽</span>
           </div>
 
-          {/* BUTTON */}
           <button type='submit' disabled={isLoading} className='w-full py-4 bg-red-500 text-white rounded-lg font-semibold hover:bg-red-400 transition disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer'>
             {isLoading ? 'Обработка оплаты...' : 'Оформить заказ'}
           </button>
